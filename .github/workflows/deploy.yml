@@ -24,8 +24,8 @@ jobs:
         ref: init_auth_page
         path: frontend
 
-    - name: Deploy service 1 to CapRover
-      uses: caprover/action-deploy@v1.0.1
+    - name: Deploy services
+      uses: caprover/deploy-from-github@v1.0.1
       with:
         server: '${{ secrets.CAPROVER_SERVER }}'
         app: '${{ secrets.APP_NAME }}'
