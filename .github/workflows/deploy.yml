@@ -22,6 +22,13 @@ jobs:
           repository: mi8-wc3/strikes-and-gutters
           submodules: true
           path: backend
+      # Сборка backend
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      - run: cd backend && chmod +x gradlew && ./gradlew build
 
       - name: Checkout service 2
         uses: actions/checkout@v4
@@ -37,14 +44,6 @@ jobs:
           node-version: '18.x'
       - run: cd frontend/react-beer && npm ci
       - run: cd frontend/react-beer && npm run build --if-present
-
-      # Сборка backend
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-      - run: cd backend && chmod +x gradlew && ./gradlew build
 
       # Создание архива для деплоя на CapRover
       - uses: actions/upload-artifact@v2
