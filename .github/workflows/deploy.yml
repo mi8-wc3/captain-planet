@@ -44,7 +44,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - run: cd backend && gradlew build
+      - run: cd backend && ./gradlew build
 
       # Создание архива для деплоя на CapRover
       - uses: actions/upload-artifact@v2
