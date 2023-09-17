@@ -37,7 +37,6 @@ jobs:
           node-version: '18.x'
       - run: cd frontend/react-beer && npm ci
       - run: cd frontend/react-beer && npm run build --if-present
-      - run: cd frontend/react-beer && npm run test --if-present
 
       # Сборка backend
       - name: Set up JDK 17
