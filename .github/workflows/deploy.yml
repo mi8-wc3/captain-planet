@@ -39,7 +39,7 @@ jobs:
       - run: cd frontend/react-beer && npm run build --if-present
 
       - name: Grant execute permission for gradlew
-        run: chmod +x backend/identity-service/gradlew
+        run: chmod +x ./gradlew
 
       # Сборка backend
       - name: Set up JDK 17
