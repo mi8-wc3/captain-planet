@@ -47,7 +47,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - run: cd backend/identity-service && ./gradlew bootJar
+      - run: cd backend/identity-service && ./gradlew jar
 
       # Создание архива для деплоя на CapRover
       - uses: actions/upload-artifact@v2
