@@ -1,14 +1,20 @@
-name: Deploy to CapRover
+name: Build & Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Подготовка рабочей области
+      - name: Checkout config repository
+        uses: actions/checkout@v4
+        with:
+          path: config
+
       - name: Checkout service 1
         uses: actions/checkout@v4
         with:
@@ -24,30 +30,51 @@ jobs:
           ref: init_auth_page
           path: frontend
 
-        # Создаем архив с backend и деплоим его
-      - name: Create deploy archive for backend
-        run: |
-          cd backend
-          tar -cvf ../deploy-backend.tar .
+      # Сборка frontend
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+      - run: cd frontend && npm ci
+      - run: cd frontend && npm run build --if-present
+      - run: cd frontend && npm run test --if-present
 
-      - name: Deploy backend service
+      # Сборка backend
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      - run: cd backend && ./gradlew bootJar
+
+      # Создание архива для деплоя на CapRover
+      - uses: actions/upload-artifact@v2
+        with:
+          name: built-files
+          path: |
+            backend/build/libs/*.jar
+            frontend/build/
+            config/captain-definition
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: built-files
+          path: deploy/
+
+      - uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          cwd: "deploy/"
+          files: |
+            backend/build/libs/*.jar
+            frontend/build/
+            config/captain-definition
+          outPath: deploy.tar
+
+      # Деплой на CapRover
+      - name: Deploy App to CapRover
         uses: caprover/deploy-from-github@v1.0.1
         with:
           server: '${{ secrets.CAPROVER_SERVER }}'
-          app: '${{ secrets.BACKEND_APP_NAME }}'
+          app: '${{ secrets.APP_NAME }}'
           token: '${{ secrets.APP_TOKEN }}'
-          tarball: 'deploy-backend.tar'
-
-        # Создаем архив с frontend и деплоим его
-      - name: Create deploy archive for frontend
-        run: |
-          cd frontend
-          tar -cvf ../deploy-frontend.tar .
-
-      - name: Deploy frontend service
-        uses: caprover/deploy-from-github@v1.0.1
-        with:
-          server: '${{ secrets.CAPROVER_SERVER }}'
-          app: '${{ secrets.FRONTEND_APP_NAME }}'
-          token: '${{ secrets.APP_TOKEN }}'
-          tarball: 'deploy-frontend.tar'
