@@ -14,15 +14,19 @@ jobs:
       with:
         ref: init_test_app
         repository: mi8-wc3/strikes-and-gutters
+        token: ${{ secrets.GIT_TOKEN }}
         submodules: true
         path: backend
+      run: tar -cvf deploy.tar .
 
     - name: Checkout service 2
       uses: actions/checkout@v4
       with:
         repository: mi8-wc3/frontend-service
+        token: ${{ secrets.GIT_TOKEN }}
         ref: init_auth_page
         path: frontend
+      run: tar -cvf deploy.tar .
 
     - name: Deploy services
       uses: caprover/deploy-from-github@v1.0.1
