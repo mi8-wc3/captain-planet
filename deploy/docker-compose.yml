@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+       - "80:80"
+       - "443:3000"
+    networks:
+       - external-network
+       - internal-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    external: false
+  external-network:
+    external: true
