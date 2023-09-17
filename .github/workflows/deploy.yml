@@ -50,7 +50,7 @@ jobs:
         with:
           name: built-files
           path: |
-            backend/identity-service/build/libs/*.jar
+            backend/identity-service/build/libs/identity-service-0.0.1-SNAPSHOT.jar
             frontend/react-beer/build/
             config/captain-definition
 
@@ -64,7 +64,7 @@ jobs:
           command: c
           cwd: "deploy/"
           files: |
-            backend/identity-service/build/libs/*.jar
+            backend/identity-service/build/libs/identity-service-0.0.1-SNAPSHOT.jar
             frontend/react-beer/build/
             config/captain-definition
           outPath: deploy.tar
