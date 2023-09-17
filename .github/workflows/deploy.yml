@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Подготовка рабочей области
-      - name: Checkout config repository
-        uses: actions/checkout@v4
-        with:
-          path: config
+#      # Подготовка рабочей области
+#      - name: Checkout config repository
+#        uses: actions/checkout@v4
+#        with:
+#          path: config
 
       - name: Checkout service 1
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
           path: |
             backend/identity-service/build/libs/identity-service-0.0.1-SNAPSHOT.jar
             frontend/react-beer/build/
-            config/captain-definition
+#            config/captain-definition
 
       - uses: actions/download-artifact@v2
         with:
@@ -66,7 +66,6 @@ jobs:
           files: |
             backend/identity-service/build/libs/identity-service-0.0.1-SNAPSHOT.jar
             frontend/react-beer/build/
-            config/captain-definition
           outPath: deploy.tar
 
       # Деплой на CapRover
